@@ -1,4 +1,4 @@
-# **AI and Machine Learning Assignments Repository**
+# **Ai500 --Foundations of AI**
 
 This repository contains a series of assignments that progressively build expertise in artificial intelligence and machine learning. These assignments cover foundational search algorithms, clustering, decision trees, neural networks, and advanced convolutional neural networks (CNNs) for applications like semantic segmentation and image similarity.
 
