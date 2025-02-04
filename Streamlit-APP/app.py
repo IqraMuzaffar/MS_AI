@@ -36,7 +36,6 @@ def load_features():
 
     # Check if the file exists
     if not os.path.exists(file_path):
-        st.error(f"⚠️ File '{file_path}' not found. Please upload or generate the CSV file.")
         return None
 
     try:
@@ -44,7 +43,6 @@ def load_features():
 
         # Ensure "features" column exists
         if "features" not in df.columns or "image_url" not in df.columns:
-            st.error("⚠️ CSV file is missing required columns ('features' and 'image_url').")
             return None
 
         # Convert "features" column from string to list safely
@@ -96,7 +94,7 @@ def main():
 
     if uploaded_image:
         # Display the uploaded image
-        st.image(uploaded_image, caption="📷 Uploaded Image", use_column_width=True, output_format="auto")
+        st.image(uploaded_image, caption="📷 Uploaded Image", use_container_width=True, output_format="auto")
 
         # Perform image similarity search
         if st.button("🔎 Find Similar Images", use_container_width=True):
@@ -116,10 +114,10 @@ def main():
             for idx, (_, row) in enumerate(similar_images.iterrows()):
                 if idx % 2 == 0:
                     with col1:
-                        st.image(row["image_url"], caption=f"🔹 Similarity: {row['similarity']:.2f}", use_column_width=True)
+                        st.image(row["image_url"], caption=f"🔹 Similarity: {row['similarity']:.2f}", use_container_width=True)
                 else:
                     with col2:
-                        st.image(row["image_url"], caption=f"🔹 Similarity: {row['similarity']:.2f}", use_column_width=True)
+                        st.image(row["image_url"], caption=f"🔹 Similarity: {row['similarity']:.2f}", use_container_width=True)
 
 # Run the Streamlit app
 if __name__ == "__main__":
