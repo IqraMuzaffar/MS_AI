@@ -7,6 +7,7 @@ from tensorflow.keras.applications import VGG16
 from tensorflow.keras.applications.vgg16 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
 from sklearn.metrics.pairwise import cosine_similarity
+import os
 
 # Load pre-trained VGG16 model
 @st.cache_resource
@@ -28,12 +29,33 @@ def extract_features(image_array, model):
     return features
 
 # Load the precomputed features from the CSV
+# Load the precomputed features from CSV
 @st.cache_data
 def load_features():
-    df = pd.read_csv("image_features.csv")
-    df["features"] = df["features"].apply(eval)  # Convert string to list
-    return df
+    file_path = "image_features.csv"  # Change this if needed
 
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        st.error(f"⚠️ File '{file_path}' not found. Please upload or generate the CSV file.")
+        return None
+
+    try:
+        df = pd.read_csv(file_path)
+
+        # Ensure "features" column exists
+        if "features" not in df.columns or "image_url" not in df.columns:
+            st.error("⚠️ CSV file is missing required columns ('features' and 'image_url').")
+            return None
+
+        # Convert "features" column from string to list safely
+        df["features"] = df["features"].apply(lambda x: eval(x) if isinstance(x, str) else x)
+
+        return df
+
+    except Exception as e:
+        st.error(f"⚠️ Error loading CSV: {e}")
+        return None
+    
 # Calculate cosine similarity
 def find_similar_images(query_features, feature_data, top_n=5):
     features_array = np.array(feature_data["features"].tolist())
